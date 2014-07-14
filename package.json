@@ -1,0 +1,8 @@
+{
+    "name": "Tender-Assistant",
+    "version": "0.1.0",
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-fileserver": "0.1.22"
+    }
+}

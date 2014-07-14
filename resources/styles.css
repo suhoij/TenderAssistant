@@ -1,0 +1,15 @@
+body {
+ overflow-x: hidden;
+}
+
+div[class$=header-theme-default] {
+    position: relative;
+    height: 30px;
+    width: auto;
+    background: #7db9e8;
+    border-bottom: 1px solid #2989d8;
+}
+
+body div[class$=content-theme-default] {
+    border: 1px solid #2989d8;
+}
