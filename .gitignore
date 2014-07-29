@@ -1,5 +1,5 @@
 /bootstrap/compiled.php
-/vendor
+/server
 composer.phar
 composer.lock
 .env.*.php
@@ -8,3 +8,4 @@ composer.lock
 Thumbs.db
 atlassian-ide-plugin.xml
 /.idea
+/node

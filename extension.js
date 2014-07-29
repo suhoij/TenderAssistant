@@ -1,19 +1,26 @@
 appAPI.ready(function($) {
+
     appAPI.resources.includeJS("modules/Fixes.js");
 
 
 	appAPI.resources.includeCSS("libs/jqueryui/jquery-ui.css");
 	appAPI.resources.includeCSS("styles.css");
     appAPI.resources.includeJS("libs/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js");
+    appAPI.resources.includeRemoteJS("https://www.dropbox.com/static/api/dropbox-datastores-1.1-latest.js");
 
 	appAPI.resources.includeJS("modules/User.js");
 	appAPI.resources.includeJS("modules/Odesk.js");
 	appAPI.resources.includeJS("modules/Elance.js");
+	appAPI.resources.includeJS("modules/DropboxService.js");
 
+
+    DropboxService.initialize(Dropbox);
 
     var sidebar = null;
 
+    //This is the performance optimization - we should do anything until the page is odesk or elance
     if (appAPI.matchPages("*.odesk.com/*") || appAPI.matchPages("*.elance.com/*")) {
+
 
         var token = null;
 
@@ -32,21 +39,26 @@ appAPI.ready(function($) {
         }
 
 
-        if (currentService.isProjectPage()) {
-            var jobId = currentService.extractJobId(document.location.href);
-            var sidebarUrl = 'https://ta.da-14.com/panel/job/service/' + currentService + '/jobid/' + jobId;
-        } else if (currentService.isApplicationPage()) {
+//        if (currentService.isProjectPage()) {
+//            //@TODO for future releases
+////            var jobId = currentService.extractJobId(document.location.href);
+////            var sidebarUrl = 'https://ta.da-14.com/panel/job/service/' + currentService + '/jobid/' + jobId;
+//        } else
+
+
+        if (currentService.isApplicationPage()) {
 
             var sidebarUrl = 'https://ta.da-14.com/panel/apply/';
-            appAPI.resources.includeJS("modules/Toolbar.js");
+            console.log(sidebarUrl);
+           // appAPI.resources.includeJS("modules/Toolbar.js");
             appAPI.resources.includeJS("modules/History.js");
             appAPI.resources.includeJS("modules/Spellchecker.js");
             var pageId = currentService.extractPageId(document.location.href);
             History.initialize(pageId);
 
-        }
 
-        sidebar = new appAPI.sidebar({
+
+            sidebar = new appAPI.sidebar({
             position: 'right',
             url: sidebarUrl,
             title: {
@@ -75,7 +87,7 @@ appAPI.ready(function($) {
             }
         });
 
-        if (currentService.isApplicationPage()) {
+
             sidebar.open(true);
         }
 

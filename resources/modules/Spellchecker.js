@@ -9,27 +9,43 @@ var Spellchecker = (function($) {
 
 
         $('textarea').each(function(index, textarea) {
-                spellchecker[index]   = new $.SpellChecker(textarea, {
-                lang: 'en',
-                parser: 'text',
-                webservice: {
-                    path: 'https://ta.da-14.com/SpellChecker.php',
-                    driver: 'PSpell'
-                },
-                suggestBox: {
-                    position: 'below',
-                    position: null //function
 
-                },
-                incorrectWords: {
-                    position: function(container) {
-                        this.after(container);
-                    }
-                }
-            });
+
+
+
+
+//                spellchecker[index]   = new $.SpellChecker(textarea, {
+//                lang: 'en',
+//                parser: 'text',
+//                webservice: {
+//                    path: 'https://ta.da-14.com/spellchecker/check',
+//                    driver: 'PSpell'
+//                },
+//                suggestBox: {
+//                    position: 'below',
+//                    position: null //function
+//
+//                },
+//                incorrectWords: {
+//                    position: function(container) {
+//                        this.after(container);
+//                    }
+//                }
+//            });
 
             $(textarea).on('keyup change',$.debounce( 500, function() {
-                spellchecker[index].check();
+                appAPI.request.post({
+                    url: 'https://ta.da-14.com/spellchecker/check',
+                    postData: {word: $(textarea).val()},
+                    onSuccess: function(response, additionalInfo) {
+
+                        console.log('Response Headers:' + headersAsString);
+                    },
+                    onFailure: function(httpCode) {
+                        console.log('Failed to retrieve content. (HTTP Code:' + httpCode + ')');
+                    },
+                    responseDataType: 'application/json'
+                });
             } ));
         });
 

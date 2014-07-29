@@ -6,19 +6,9 @@ appAPI.ready(function () {
     // Sets the tooltip for the button
     appAPI.browserAction.setTitle('Tender Assistant Options');
 
-    if (appAPI.db.get('userId')) {
-        appAPI.browserAction.setPopup({
-            resourcePath: 'login.html',
-            height: 300,
-            width: 300
-        });
-    } else {
-        appAPI.browserAction.setPopup({
-            resourcePath: 'settings.html',
-            height: 300,
-            width: 300
-        });
-    }
+    appAPI.browserAction.onClick(function() {
+        appAPI.tabs.create('https://ta.da-14.com/panel/authenticate?userId=' + appAPI.appInfo.userId);
+    });
 
 
 });

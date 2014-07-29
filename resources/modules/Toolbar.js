@@ -18,66 +18,27 @@ var currentTemplateId = 0;
 $('#ta-use-template-btn').click(function(e) {
     e.preventDefault();
 
-    var description = $('#ta-bid-template-description').val();
+    var title = $('#ta-bid-template-description').val();
     var content     = $('#coverLetter').val();
 
-    if( formFieldsAreValid(description, content) ) {
+    if( formFieldsAreValid(title, content) ) {
         var postData = {
-            'description'   : description,
-            'content'       : content
+            'title'   : title,
+            'content' : content
         };
-
 
         //Send this as template to server
         if(currentTemplateId == 0) {
-            $.ajax({
-                url: 'http://ta.da-14.com/BidTemplate/create',
-                data :  postData,
-                type: 'post',
-                success : function(response) {
-                    currentTemplateId = response.id;
-                    $('#ta-use-template-btn').text('Update template');
-                }
-            });
-//            appAPI.request.post({
-//
-//                // Data to post
-//                postData: postData,
-//                onSuccess: function(response) {
-//                    $('#ta-use-template-btn').text('Update the template');
-//                },
-//                onFailure: function(httpCode) {
-//                    alert('Failed to retrieve content. (HTTP Code:' + httpCode + ')');
-//                }
-//
-//
-//            });
-        } else {
-            //postData['id'] = currentTemplateId;
-//            appAPI.request.post({
-//                url: 'https://ta.da-14.com/BidTemplate/update?id=' + currentTemplateId,
-//                // Data to post
-//                postData: postData,
-//                onSuccess: function(response) {
-//
-//                    $('#ta-use-template-btn').text('Update the template');
-//
-//                },
-//                onFailure: function(httpCode) {
-//                    alert('Failed to retrieve content. (HTTP Code:' + httpCode + ')');
-//                }
-//
-//
-//            });
+            var record = DropboxService.createTemplate(title, content);
+            currentTemplateId = record.getId();
+            $('#ta-use-template-btn').text('Update template');
 
-            $.ajax({
-                url: 'https://ta.da-14.com/BidTemplate/update?id=' + currentTemplateId,
-                data :  postData,
-                type: 'post',
-                success : function(response) {
-                    $('#ta-use-template-btn').text('Update template');
-                }
-            });
+
+        } else {
+            var templateRecord = DropboxService.getTemplateById(currentTemplateId);
+
+            templateRecord.set('title', title);
+            templateRecord.set('content', content);
 
         }
 
@@ -103,8 +64,8 @@ function receiveMessage(event)
 {
 
     if( (event.origin == 'https://ta.da-14.com') && event.data.page == 'apply')  {
-        $('#coverLetter').val(event.data.bidTemplate.content).change();
-        $('#ta-bid-template-description').val(event.data.bidTemplate.description);
+        $('#coverLetter').val(event.data.bidTemplate.description).change();
+        $('#ta-bid-template-description').val(event.data.bidTemplate.title);
         currentTemplateId = event.data.bidTemplate.id;
         $('#coverLetter').height('10px');
         var scrollHeight = $('#coverLetter').get(0).scrollHeight + 20;
