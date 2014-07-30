@@ -12,6 +12,7 @@ appAPI.ready(function($) {
 	appAPI.resources.includeJS("modules/Odesk.js");
 	appAPI.resources.includeJS("modules/Elance.js");
 	appAPI.resources.includeJS("modules/DropboxService.js");
+	appAPI.resources.includeJS("modules/Toolbar.js");
 
 
     DropboxService.initialize(Dropbox);
